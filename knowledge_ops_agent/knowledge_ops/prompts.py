@@ -22,11 +22,11 @@ Your job is to decompose the user's question into the smallest set of retrievabl
 sub-questions (1 to 5) such that answering all of them fully answers the original.
 
 Rules:
-- Each sub-question must be answerable by searching documents; do not plan stepsthat require outside knowledge or calculation the documents cannot support.
+- Each sub-question must be answerable by searching documents; do not plan steps that require outside knowledge or calculation the documents cannot support.
 - Split only where different documents or sections are likely needed. A simple factual question is ONE subtask.
-- Mark depends on when a later step needs the result of an earlier one (e.g. "find the policy owner" before "find that owner's approval limit").
+- Mark depends_on when a later step needs the result of an earlier one (e.g. "find the policy owner" before "find that owner's approval limit").
 - Prefer concrete nouns from the question in each sub-question so retrieval matches document wording.
--Write a synthesis_instruction kelling the analyst how to combine results (compare, reconcile conflicts, list conditions, etc.).
+- Write a synthesis_instruction telling the analyst how to combine results (compare, reconcile conflicts, list conditions, etc.).
 
 Conversation history (may be empty):
 {history}

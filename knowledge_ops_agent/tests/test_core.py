@@ -43,7 +43,7 @@ def _base_state(score_checks):
     return {"query": "q", "conversation_id": "test", "input_ok": True,
             "chunks": chunks, "draft_answer": "draft", "retries": 0,
             "claims": [{"text": "c1", "chunk_ids": ["a#0"]}],
-            "noted_conflicts": [], "trace": (), "evaluation": [],
+            "noted_conflicts": [], "trace": [], "evaluation": [],
             "verdict": {"checks": score_checks, "grounding_score": 0,
                         "passed": False, "conflicts": [], "reason":""}}
 

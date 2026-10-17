@@ -139,7 +139,7 @@ def finalize(state: AgentState) -> dict:
             answer = ("I couldn't find enough grounded information in the "
                         "documents to answer this reliably.\n\nPartial findings: "
                         + answer)
-        if conf in ("Low", "refused"):
+        if conf in ("low", "refused"):
             weak = [c["claim"] for c in v["checks"]
                     if c["verdict"] != "supported"]
             answer += ("\n\n Confidence is low. These statements could not be "

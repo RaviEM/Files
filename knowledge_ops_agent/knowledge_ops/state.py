@@ -39,7 +39,7 @@ class AgentState(TypedDict, total=False):
 
     chunks: list[RetrievedChunk]
     draft_answer: str
-    claims: list (dict)
+    claims: list[dict]
     noted_conflicts: list[str]
 
     verdict: dict | None

@@ -14,7 +14,7 @@ class Settings:
     llm_provider: str = os.getenv("LLM_PROVIDER", "ollama")
     ollama_model: str = os.getenv("OLLAMA_MODEL", "qwen2.5:7b")
     ollama_base_url: str = os.getenv("OLLAMA_BASE_URL", "http://localhost:11434")
-    azure_deployment: str = os.getenv("AZURE_OPENAI_DEPLOYMENT", "gpt-40-mini")
+    azure_deployment: str = os.getenv("AZURE_OPENAI_DEPLOYMENT", "gpt-4o-mini")
     azure_api_version: str = os.getenv("AZURE_OPENAI_API_VERSION", "2024-08-01-preview")
 
     #Embeddings + vector store (always local)
