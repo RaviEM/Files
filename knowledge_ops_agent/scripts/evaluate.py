@@ -11,7 +11,7 @@ rows = [json.loads(l) for l in path.read_text().splitlines() if l.strip()]
 scores, src_hits, conf_hits, retries = [], 0, 0, []
 for r in rows:
     s = graph.invoke({"query": r["question"], "conversation_id": "eval", "trace": [], "evaluation": []})
-    V = s.get("verdict") or {}
+    v = s.get("verdict") or {}
     scores.append(v.get("grounding_score", 0.0))
     cited = {x.split(" (p.")[0] for x in s.get("sources", [])}
     src_ok = set(r["expected_sources"]).issubset(cited)

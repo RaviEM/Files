@@ -19,7 +19,7 @@ def get_vectorstore() -> Chroma:
                     persist_directory=str(settings.chroma_dir))
 
 def infer_doc_type(path: Path) -> str:
-    name = path.stem.Lower()
+    name = path.stem.lower()
     for key in ("policy", "sop", "contract", "compliance", "audit"):
         if key in name:
             return key
@@ -56,4 +56,4 @@ def ingest(data_dir: Path | None = None) -> int:
 
 if __name__ == "__main__":
     n = ingest()
-    print("Ingested {n} chunks into {settings.chroma_dir}")
+    print(f"Ingested {n} chunks into {settings.chroma_dir}")

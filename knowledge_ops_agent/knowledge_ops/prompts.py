@@ -6,7 +6,7 @@ class PlannedSubTask(BaseModel):
     id: str = Field(description="Short id, e.g. 't1'")
     question: str = Field(description="Self-contained sub-question")
     rationale: str = Field(description="Why this step is needed (1 sentence)")
-    depends_on: list[str] = Field(default_factory-list,
+    depends_on: list[str] = Field(default_factory=list,
                                 description="ids that must finish first")
 
 class Plan(BaseModel):
@@ -64,7 +64,7 @@ class Synthesis(BaseModel):
 class ClaimCheck (BaseModel):
     claim: str
     verdict: Literal["supported", "partially_supported", "unsupported", "contradicted"]
-    evidence: str = Field(description="Quote or paraphrase from the chunk, or "*")
+    evidence: str = Field(description="Quote or paraphrase from the chunk, or ''")
     chunk_id: str | None
 
 
@@ -85,7 +85,7 @@ For every claim:
 - unsupported: nothing in the cited chunks backs it.
 - contradicted: the chunks say the opposite.
 
-Then compute grounding_score = supported / total (partials count 0.5). Set passed = true only if grounding_score >= {threshold) and no claim is contradicted. List conflicts where two chunks disagree with each other.
+Then compute grounding_score = supported / total (partials count 0.5). Set passed = true only if grounding_score >= {threshold} and no claim is contradicted. List conflicts where two chunks disagree with each other.
 
 Claims:
 {claims}

@@ -35,7 +35,7 @@ from unittest.mock import patch
 from knowledge_ops import nodes
 from knowledge_ops.prompts import ClaimCheck, Verdict
 
-def base_state(score_checks):
+def _base_state(score_checks):
     chunks = [{"chunk_id": "a#0", "source": "a.md", "page": 0, "text": "x", 
                 "doc_type":"policy", "score": 0.8, "subtask_id": "t1"},
                 {"chunk_id": "b#0", "source": "b.md", "page": 2, "text": "y",
@@ -43,9 +43,9 @@ def base_state(score_checks):
     return {"query": "q", "conversation_id": "test", "input_ok": True,
             "chunks": chunks, "draft_answer": "draft", "retries": 0,
             "claims": [{"text": "c1", "chunk_ids": ["a#0"]}],
-            "noted conflicts": [], "trace": (), "evaluation": [],
+            "noted_conflicts": [], "trace": (), "evaluation": [],
             "verdict": {"checks": score_checks, "grounding_score": 0,
-                        "passed": false, "conflicts": 1, "reason":""}}
+                        "passed": False, "conflicts": [], "reason":""}}
 
 
 @patch("knowledge_ops.nodes.memory.append_turn")

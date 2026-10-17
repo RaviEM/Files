@@ -2,7 +2,7 @@ import os
 from dataclasses import dataclass, field
 from pathlib import Path
 
-from dotens import load_dotenv
+from dotenv import load_dotenv
 
 load_dotenv()
 
@@ -30,7 +30,7 @@ class Settings:
     # Retrieval / verification thresholds
     top_k: int = int(os.getenv("TOP_K", "4"))
     min_relevance: float = float(os.getenv("MIN_RELEVANCE", "0.35"))
-    grounding_threshold: float = float(os.getenv("GROUNDING THRESHOLD", "0.8"))
+    grounding_threshold: float = float(os.getenv("GROUNDING_THRESHOLD", "0.8"))
     max_retries: int = int(os.getenv("MAX_RETRIES", "2"))
 
     # Guardrails

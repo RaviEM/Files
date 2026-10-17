@@ -74,7 +74,7 @@ def retriever(state: AgentState) -> dict:
                 "score": round(score, 3), "subtask_id": task ["id"]})
         evals += evaluation("retriever", "relevance_scores", scores,
                             subtask=task["id"])
-    return {"chunks": chunks, "retrieval flags": flags, "evaluation": evals,
+    return {"chunks": chunks, "retrieval_flags": flags, "evaluation": evals,
         "trace": trace (state, "retriever", "search",
                         f"{len(chunks)} unique chunks from "
                         f"{len({c['source'] for c in chunks})} source(s)"
@@ -102,7 +102,7 @@ def verifier(state: AgentState) -> dict:
         claims=json.dumps(state["claims"], indent=1),
         chunks=_fmt_chunks(state["chunks"])))
     weights = {"supported": 1.0, "partially_supported": 0.5}
-    score = (sum(weights.get(c.verdict, 0) for c in v.checks) / Len(v.checks)
+    score = (sum(weights.get(c.verdict, 0) for c in v.checks) / len(v.checks)
             if v.checks else 0.0)
     contradicted = any(c.verdict == "contradicted" for c in v.checks)
     passed = score >= settings.grounding_threshold and not contradicted
@@ -130,7 +130,7 @@ def finalize(state: AgentState) -> dict:
         score= v["grounding_score"]
         conf = ("high" if v["passed"] and score >= 0.9 else
                 "medium" if v["passed"] else
-                "Low" if score >= 0.5 else "refused")
+                "low" if score >= 0.5 else "refused")
         by_id = {c["chunk_id"]: c for c in state ["chunks"]}
         used = {cid for cl in state["claims"] for cid in cl["chunk_ids"] if cid in by_id}
         sources = sorted({f"{by_id[c]['source']} (p.{by_id[c]['page']})" for c in used})

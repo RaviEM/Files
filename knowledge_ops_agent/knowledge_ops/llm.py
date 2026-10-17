@@ -2,21 +2,21 @@
 
 from functools import lru_cache
 
-from Langchain_core.language_models import BaseChatModel
+from langchain_core.language_models import BaseChatModel
 
 from .config import settings
 
 @lru_cache(maxsize=None)
 def get_llm(role: str = "default", temperature: float = 0.0) -> BaseChatModel:
-    if settings.llm_provider = "azure":
+    if settings.llm_provider == "azure":
         from langchain_openai import AzureChatOpenAI
         return AzureChatOpenAI(
             azure_deployment=settings.azure_deployment,
             api_version=settings.azure_api_version,
             temperature=temperature,
         )
-    from langchain_ollama import Chatollama
-    return Chatollama(
+    from langchain_ollama import ChatOllama
+    return ChatOllama(
         model=settings.ollama_model,
         base_url=settings.ollama_base_url,
         temperature=temperature,
