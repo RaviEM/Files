@@ -39,7 +39,7 @@ def main():
     conv = args.conv or uuid.uuid4().hex[:8]
     print(f"conversation: {conv} provider: {settings.llm_provider}")
 
-    if args.cmd="ask":
+    if args.cmd == "ask":
         run_query(graph, args.query, conv, not args.no_trace)
     else:
         while True:

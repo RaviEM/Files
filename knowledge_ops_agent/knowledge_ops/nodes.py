@@ -4,7 +4,7 @@ from . import guardrails, memory
 from .config import settings
 from .llm import structured
 from .observability import evaluation, trace
-from .prompts import (ANALYST PROMPT, ORCHESTRATOR PROMPT, REFINE_PROMPT, VERIFIER PROMPT, Plan, Synthesis, Verdict)
+from .prompts import (ANALYST_PROMPT, ORCHESTRATOR_PROMPT, REFINE_PROMPT, VERIFIER_PROMPT, Plan, Synthesis, Verdict)
 from .state import AgentState
 
 _vectorstore=None
@@ -16,16 +16,16 @@ def _store():
         _vectorstore= get_vectorstore()
     return _vectorstore
 
-def _fmt_chunks(chunks) > str:
+def _fmt_chunks(chunks) -> str:
     return "\n\n".join(f"[{c['chunk_id']}] ({c['source']}, p.{c['page']})\n{c['text']}"
                         for c in chunks)
 
 def validate_input(state: AgentState)-> dict:
     ok, reason = guardrails.validate(state ["query"])
-return {
-    "input_ok": ok, "rejection_reason": reason, "retries": 0,
-    "retrieval_flags": [],
-    "trace": trace(state, "guardrail", "validate_input",
+    return {
+        "input_ok": ok, "rejection_reason": reason, "retries": 0,
+        "retrieval_flags": [],
+        "trace": trace(state, "guardrail", "validate_input",
                     "accepted" if ok else f"rejected: {reason}"),
     }
 
@@ -44,7 +44,7 @@ def orchestrator(state: AgentState) -> dict:
     else:
         unsupported = [c["claim"] for c in state ["verdict"]["checks"]
                         if c["verdict"] in ("unsupported", "contradicted")]
-        prompt = REFINE PROMPT.format(
+        prompt = REFINE_PROMPT.format(
             query=state["query"], plan=json.dumps(state["plan"]),
             unsupported=unsupported, flags=state.get("retrieval_flags", []))
     plan: Plan =  llm.invoke(prompt)
@@ -107,7 +107,7 @@ def verifier(state: AgentState) -> dict:
     contradicted = any(c.verdict == "contradicted" for c in v.checks)
     passed = score >= settings.grounding_threshold and not contradicted
     v.grounding_score, v.passed = round(score, 3), passed
-    conflicts = list(set (v.conflicts state.get("noted_conflicts", [])))
+    conflicts = list(set(v.conflicts + state.get("noted_conflicts", [])))
     evals = evaluation("verifier", "grounding_score", v.grounding_score,
                         attempt=state.get("retries", 0))
     if conflicts:
@@ -119,7 +119,7 @@ def verifier(state: AgentState) -> dict:
             "retries": state.get("retries", 0) + (0 if passed else 1),
             "evaluation": evals,
             "trace": trace(state, "verifier", "check",
-                            f"grounding={v.grounding score} passed={passed}: {v. reason}")}
+                            f"grounding={v.grounding_score} passed={passed}: {v. reason}")}
 
 def finalize(state: AgentState) -> dict:
     if not state.get("input_ok", True):

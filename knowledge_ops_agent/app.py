@@ -37,14 +37,14 @@ for state in reversed (st.session_state.runs):
             st.json(state.get("plan") or {})
         with st.expander("Decision trace", expanded=True):
             for t in state["trace"]:
-            st.markdown(f"`{t['step']:>2}` **{t['agent']}** - {t['action']} - {t['detail']}")
+                st.markdown(f"`{t['step']:>2}` **{t['agent']}** - {t['action']} - {t['detail']}")
     with st.expander("Claim verification"):
         for c in (state.get("verdict") or {}).get("checks", []):
             st.markdown (f"- **{c['verdict']}** - {c['claim']}"
                         + (f" \n _evidence:_ {c['evidence']}" if c["evidence"] else ""))
     with st.expander("Evaluation signals"):
         st.json(state.get("evaluation", []))
-    with st.expander ("Retrieved chunks");
+    with st.expander ("Retrieved chunks"):
         for ch in state.get("chunks", []):
             st.markdown (f"**{ch['chunk_id']}** score={ch['score']} ({ch['subtask_id']})")
             st.text(ch["text"][:400])

@@ -35,12 +35,12 @@ class AgentState(TypedDict, total=False):
     history: list[dict]
     plan: dict
     retries: int
-    retrieval flags: list[str]
+    retrieval_flags: list[str]
 
     chunks: list[RetrievedChunk]
-    draft answer: str
+    draft_answer: str
     claims: list (dict)
-    noted conflicts: list[str]
+    noted_conflicts: list[str]
 
     verdict: dict | None
 

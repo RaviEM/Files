@@ -5,7 +5,7 @@ from .config import settings
 from .state import AgentState
 
 def after_validation(state: AgentState)-> str:
-return "memory" if state["input_ok"] else "finalize"
+    return "memory" if state["input_ok"] else "finalize"
 
 def after_verifier(state: AgentState)-> str:
     if state["verdict"]["passed"]:

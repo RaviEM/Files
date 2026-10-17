@@ -1,11 +1,12 @@
 import re
 
 from .config import settings
-INJECTION PATTERNS = [
+
+INJECTION_PATTERNS = [
     r"ignore (all |any )?(previous|prior|above) instructions",
     r"you are now", r"system prompt", r"developer mode", r"jailbreak",
 ]
-PII PATTERNS = [
+PII_PATTERNS = [
     r"\b\d{3}-\d{2}-\d{4}\b",
     r"\b(?:\d[-]*?){13,16}\b",
 ]

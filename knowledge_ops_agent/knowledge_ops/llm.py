@@ -8,7 +8,7 @@ from .config import settings
 
 @lru_cache(maxsize=None)
 def get_llm(role: str = "default", temperature: float = 0.0) -> BaseChatModel:
-    if settings.11m_provider = "azure":
+    if settings.llm_provider = "azure":
         from langchain_openai import AzureChatOpenAI
         return AzureChatOpenAI(
             azure_deployment=settings.azure_deployment,

@@ -3,7 +3,7 @@ from pathlib import Path
 from langchain_chroma import Chroma
 from langchain_community.document_loaders import (Docx2txtLoader, PyPDFLoader, TextLoader)
 from langchain_core.documents import Document
-from langchain_hugging face import HuggingFaceEmbeddings
+from langchain_huggingface import HuggingFaceEmbeddings
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 
 from .config import settings
@@ -30,7 +30,7 @@ def load_documents(data_dir: Path) -> list[Document]:
     docs: list[Document] = []
     for path in sorted(data_dir.rglob("*")):
         loader_cls = LOADERS.get(path.suffix.lower())
-        if not loader_cls
+        if not loader_cls:
             continue
         for d in loader_cls(str(path)).load():
             d.metadata.update(source=path.name, doc_type=infer_doc_type(path), page=d.metadata.get("page", 0))
@@ -46,7 +46,7 @@ def ingest(data_dir: Path | None = None) -> int:
 
     splitter = RecursiveCharacterTextSplitter(
         chunk_size=settings.chunk_size, chunk_overlap=settings.chunk_overlap)
-        chunks = splitter.split_documents(docs)
+    chunks = splitter.split_documents(docs)
     for i, c in enumerate(chunks):
         c.metadata["chunk_id"] = f"{c.metadata['source']}#{i}"
     
@@ -54,6 +54,6 @@ def ingest(data_dir: Path | None = None) -> int:
     store.add_documents(chunks, ids=[c.metadata ["chunk_id"] for c in chunks]) 
     return len(chunks)
 
-if __name__ ="__main__":
+if __name__ == "__main__":
     n = ingest()
     print("Ingested {n} chunks into {settings.chroma_dir}")
