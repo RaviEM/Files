@@ -8,7 +8,7 @@ INJECTION_PATTERNS = [
 ]
 PII_PATTERNS = [
     r"\b\d{3}-\d{2}-\d{4}\b",
-    r"\b(?:\d[-]*?){13,16}\b",
+    r"\b(?:\d[ -]*?){13,16}\b",
 ]
 
 def validate(query: str) -> tuple[bool, str | None]:

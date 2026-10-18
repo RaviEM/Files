@@ -15,7 +15,7 @@ Refusals route directly to `finalize` with `confidence = refused`; no agent is i
 
 | Control | Mechanism |
 |---|---|
-| Grounding gate | answer is released only if `grounding_score > GROUNDING THRESHOLD` (0.8) and no clain is `contradicted` |
+| Grounding gate | answer is released only if `grounding_score > GROUNDING_THRESHOLD` (0.8) and no clain is `contradicted` |
 | Deterministic scoring | the LLM labels each claim; the score and pass/fail are recomputed in Python (`supported = 1`, `partially_supported = 0.5`, else `0`) |
 | Bounded retry | failed verdicts re-plan at most `MAX_RETRIES` (2) times |
 | Confidence Labelling | `high >= 0.9` - `medium` passed - `low >= 0.5` - `refused < 0.5` |

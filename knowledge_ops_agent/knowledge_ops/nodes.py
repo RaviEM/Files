@@ -142,10 +142,10 @@ def finalize(state: AgentState) -> dict:
         if conf in ("low", "refused"):
             weak = [c["claim"] for c in v["checks"]
                     if c["verdict"] != "supported"]
-            answer += ("\n\n Confidence is low. These statements could not be "
+            answer += ("\n\nConfidence is low. These statements could not be "
                         "fully verified against the sources: " + "; ".join(weak))
         if v["conflicts"]:
-            answer += "\n\nNote: sources disagree on:" + "; ".join(v["conflicts"])
+            answer += "\n\nNote: sources disagree on: " + "; ".join(v["conflicts"])
         answer += "\n\nSources: " + ", ".join(sources)
     memory.append_turn(state["conversation_id"], state["query"], answer, conf)
     return {"final_answer": answer, "sources": sources, "confidence": conf,
