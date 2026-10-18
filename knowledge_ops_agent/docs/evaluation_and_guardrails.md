@@ -1,12 +1,12 @@
-# Evaluation, guardrails and observability 
+# Evaluation, guardrails and observability
 
 ## 1. Guardrails
-### Input validation (`guardrails.py', runs before any LLM call)
+### Input validation (`guardrails.py`, runs before any LLM call)
 
 | Check | Rule | Action |
 |---|---|---|
-Empty / oversize | `len(query) > MAX_QUERY_CHARS` (2000) | refuse |
-| Prompt injection | regex list: "ignore previous instructions", "system prompt", "developer mode", - | refuse, reason Logged I
+| Empty / oversize | `len(query) > MAX_QUERY_CHARS` (2000) | refuse |
+| Prompt injection | regex list: "ignore previous instructions", "system prompt", "developer mode", - | refuse, reason Logged
 | Sensitive identifiers | SSN-like and card-like number patterns | refuse |
 
 Refusals route directly to `finalize` with `confidence = refused`; no agent is invoked and the rejection reason is written to the trace.
@@ -15,11 +15,11 @@ Refusals route directly to `finalize` with `confidence = refused`; no agent is i
 
 | Control | Mechanism |
 |---|---|
-| Grounding gate | answer is released only if `grounding_score > GROUNDING_THRESHOLD` (0.8) and no clain is `contradicted` |
+| Grounding gate | answer is released only if `grounding_score > GROUNDING_THRESHOLD` (0.8) and no claim is `contradicted` |
 | Deterministic scoring | the LLM labels each claim; the score and pass/fail are recomputed in Python (`supported = 1`, `partially_supported = 0.5`, else `0`) |
 | Bounded retry | failed verdicts re-plan at most `MAX_RETRIES` (2) times |
-| Confidence Labelling | `high >= 0.9` - `medium` passed - `low >= 0.5` - `refused < 0.5` |
-| Disclaimers | Low/refused answers list the unverified statements verbatim |
+| Confidence labelling | `high >= 0.9` - `medium` passed - `low >= 0.5` - `refused < 0.5` |
+| Disclaimers | `Low` / `refused` answers list the unverified statements verbatim |
 | Conflict disclosure | source disagreements (from analyst or verifier) are appended to the answer |
 | Source attribution | sources are derived from the chunk ids the claims cite, not from everything retrieved 1
 | Closed-world prompting | analyst prompt forbids filling gaps from general knowledge |
@@ -29,11 +29,10 @@ Every run writes `logs/run_<timestamp>.json`. The `evaluation` list contains:
 
 | Signal | Emitted by | Shape | Detects |
 |---|---|---|---|
-| `relevance_scores` | retriever | per sub-task list of similarity scores | insufficient / irrelevant retrieval (flag when `max < MIN_RELEVANCE`) |
-| `grounding_score` | verifier | float per attempt | low grounding |
+| `relevance_scores` | retriever | list of similarity scores per sub-task (with `subtask` id) | insufficient / irrelevant retrieval (flag when `max < MIN_RELEVANCE`) |
+| `grounding_score` | verifier | float per attempt (with `attempt` number) | low grounding |
 | `conflicts` | verifier | list of strings contradictory sources or analyst/verifier disagreement |
 | `failure` | verifier | `low_grounding` or `contradiction` | failed attempt |
-
 
 ## 3. Running an evaluation
 A small golden set lives in `tests/golden.jsonl` (question, expected sources, expected confidence). `python -m scripts.evaluate` runs each question through the graph and reports:

@@ -4,15 +4,14 @@
 
 ## Agents and responsibilities
 
-| Node | Agent | Input Output Decision it owns |
+| Node | Agent | Input | Output | Decision it owns |
 |---|---|---|---|---|
 | `validate_input` | Guardrail | raw query | `input_ok`, `rejection_reason` | reject before any LLM call |
 | `memory` | Memory | `conversation_id` | `history` | which prior turns to surface |
 | `orchestrator` | Orchestrator | query, history, (on retry) unsupported claims | `plan` with 1-5 sub-tasks, rationale, dependencies, synthesis instruction | how to decompose and route |
-| `retriever` | Retriever | plan | `chunks` with scores and metadata, `retrieval flags` | which evidence to admit |
-| `analyst` | Analyst | chunks, synthesis instruction | `draft_answer`, `claims` (each tied to chunk ids),
-| `noted_conflicts` | how to combine sources |
-| `verifier` | Verifier | claims, chunks | `verdict`: per-clain label, grounding score, conflicts, pass/fail | whether the answer may be released |
+| `retriever` | Retriever | plan | `chunks` with scores and metadata, `retrieval_flags` | which evidence to admit |
+| `analyst` | Analyst | chunks, synthesis instruction | `draft_answer`, `claims` (each tied to chunk ids), `noted_conflicts` | how to combine sources |
+| `verifier` | Verifier | claims, chunks | `verdict`: per-claim label, grounding score, conflicts, pass/fail | whether the answer may be released |
 | `finalize` |-| verdict, claims, chunks | `final_answer`, `sources`, `confidence` | how to present confidence and caveats |
 
 ## Control flow
@@ -39,7 +38,7 @@ Two conditional edges carry all routing logic (`graph.py`):
 
 ## State
 
-`AgentState` (`state.py`) is a single TypedDict shared by all nodes, `trace` and `evaluation` use `operator.add` reducers so every node appends without overwritings everything else is replaced per attempt. This is what makes the decision trace and evaluation log complete without any extra plumbing.
+`AgentState` (`state.py`) is a single TypedDict shared by all nodes, `trace` and `evaluation` use `operator.add` reducers, so every node appends without overwriting; everything else is replaced per attempt. This is what makes the decision trace and evaluation log complete without any extra plumbing.
 as Models
 
 
